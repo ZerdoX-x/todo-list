@@ -2,8 +2,8 @@ import colors from 'vuetify/es5/util/colors'
 
 export default {
   server: {
-    port: 8080, // default: 3000
-    host: '0.0.0.0' // default: localhost
+    port: process.env.PORT || 8080, // default: 3000
+    host: process.env.HOST || '0.0.0.0' // default: localhost
   },
   mode: 'universal',
   /*
