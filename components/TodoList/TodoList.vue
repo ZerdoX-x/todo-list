@@ -2,9 +2,10 @@
   <v-list>
     <todo-list-task
       v-for="task of todoList"
-      :key="task.key"
+      :key="task.id"
       :task="task"
-      @remove-task="removeTodoListTask"
+      :is-filtered="isFiltered"
+      @remove-task="removeTask"
     />
   </v-list>
 </template>
@@ -20,15 +21,14 @@ export default {
     todoList: {
       type: Array,
       required: true
-    }
-  },
-  data() {
-    return {
-      test: 0
+    },
+    isFiltered: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
-    removeTodoListTask(id) {
+    removeTask(id) {
       this.$emit('remove-task', id)
     }
   }

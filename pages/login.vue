@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <h1>Log in</h1>
-    <auth-form parent="signin">
+    <v-form>
       <label>
         Email:
         <v-text-field
@@ -21,7 +21,7 @@
         />
       </label>
       <v-btn type="submit">Log in</v-btn>
-    </auth-form>
+    </v-form>
     <span>
       First time here?
       <v-btn router to="/signup">Create an account</v-btn>
@@ -30,11 +30,7 @@
 </template>
 
 <script>
-import AuthForm from '../components/AuthForm/AuthForm'
 export default {
-  name: 'Login',
-  components: {
-    AuthForm
-  }
+  name: 'Login'
 }
 </script>

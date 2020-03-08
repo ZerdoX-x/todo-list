@@ -4,7 +4,7 @@
       v-model.lazy="textFieldValue"
       outlined
       label="Create task"
-      @keyup.enter="addTodoListTask"
+      @keyup.enter="addTask"
     />
     <v-select
       v-model="filterValue"
@@ -15,10 +15,19 @@
       <todo-list
         v-if="filteredTodoList.length"
         :todo-list="filteredTodoList"
-        @remove-task="removeTodoListTask"
+        :is-filtered="filterValue !== 'All'"
+        @remove-task="removeTask"
       />
       <div v-else>
-        No Todo Tasks.
+        <span v-if="filterValue === 'Completed'">
+          No Completed Tasks!
+        </span>
+        <span v-else-if="filterValue === 'Uncompleted'">
+          No Uncompleted Tasks. Create new one!
+        </span>
+        <span v-else>
+          No Todo Tasks. Create new one!
+        </span>
       </div>
     </client-only>
   </div>
@@ -78,9 +87,8 @@ export default {
     else localStorage.setItem('filterValue', this.filterValue)
   },
   methods: {
-    addTodoListTask() {
-      let textFieldValue = this.textFieldValue
-      textFieldValue = textFieldValue.trim()
+    addTask() {
+      const textFieldValue = this.textFieldValue.trim()
       if (!textFieldValue) return
       this.todoList.push({
         text: textFieldValue,
@@ -89,8 +97,11 @@ export default {
       })
       this.textFieldValue = ''
     },
-    removeTodoListTask(id) {
+    removeTask(id) {
       this.todoList = this.todoList.filter((task) => task.id !== id)
+      this.matchTasksIdWithIndex()
+    },
+    matchTasksIdWithIndex() {
       this.todoList.forEach((value, index) => {
         value.id = index
       })

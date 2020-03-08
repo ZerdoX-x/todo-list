@@ -1,13 +1,17 @@
 <template>
-  <v-list-item>
+  <v-list-item class="task">
     <span
-      class="todo-list-task__text"
-      :class="{ 'todo-list-task__text_completed': task.isCompleted }"
+      class="task__text"
+      :class="{ task_completed__text: task.isCompleted }"
     >
       {{ task.text | startsWithCapitalLetter }}
     </span>
-    <v-checkbox v-model="task.isCompleted" class="ml-auto"></v-checkbox>
-    <v-btn icon fab @click="$emit('remove-task', task.id)">
+    <v-checkbox
+      v-model="isCompleted"
+      class="ml-auto"
+      @change="moveTask"
+    ></v-checkbox>
+    <v-btn icon fab @click="removeTask($event, task.id)">
       <v-icon>mdi-close-circle</v-icon>
     </v-btn>
   </v-list-item>
@@ -25,52 +29,79 @@ export default {
     task: {
       type: Object,
       required: true
+    },
+    isFiltered: {
+      type: Boolean,
+      required: true
+    }
+  },
+  data() {
+    return {
+      isCompleted: null,
+      delay: 500
     }
   },
   watch: {
-    'task.isCompleted': {
+    task: {
+      deep: true,
       handler(e) {
-        console.log(e)
-        console.log(this)
+        // sort checkboxes
+        this.isCompleted = e.isCompleted
       }
+    }
+  },
+  mounted() {
+    // check checkbox if task is completed
+    this.isCompleted = this.task.isCompleted
+  },
+  methods: {
+    removeTask({ target }, id) {
+      setTimeout(() => {
+        this.$emit('remove-task', id)
+        this.$el.classList.remove('task_removed')
+        target.checked = false
+      }, this.delay)
+      this.$el.classList.add('task_removed')
+    },
+    moveTask() {
+      // animate & remove if list is filtered else remove
+      if (this.isFiltered) {
+        setTimeout(() => {
+          this.task.isCompleted = !this.task.isCompleted
+          this.$el.classList.remove('task_moved')
+        }, this.delay)
+        this.$el.classList.add('task_moved')
+      } else this.task.isCompleted = !this.task.isCompleted
     }
   }
 }
 </script>
 
 <style>
-.todo-list-task__text_completed {
+.task__text {
   opacity: 1;
   will-change: opacity;
   transition: opacity 0.5s;
-  position: relative;
 }
 
-.todo-list-task__text_completed {
+.task_completed__text {
   opacity: 0.5;
 }
 
-.todo-list-task__text_completed:after {
-  content: ' ';
-  position: absolute;
-  top: 50%;
-  left: 0;
-  width: 140%;
-  height: 2px;
-  background: #fff;
-  animation-name: strike;
-  animation-duration: 0.5s;
-  animation-timing-function: ease-in;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
+.task {
+  will-change: transform, opacity;
 }
 
-@keyframes strike {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
+.task_removed,
+.task_moved {
+  opacity: 0;
+  transition: transform 0.5s, opacity 0.5s;
+}
+.task_removed {
+  transform: translateX(-100vw);
+}
+
+.task_moved {
+  transform: translateX(100vw);
 }
 </style>
