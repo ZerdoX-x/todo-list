@@ -1,7 +1,7 @@
 export const state = () => ({
   todoList: [],
   filterValue: 'All',
-  animationDuration: 500
+  animationsDuration: 500
 })
 
 export const getters = {
@@ -22,8 +22,8 @@ export const getters = {
         return state.todoList
     }
   },
-  animationDuration(state) {
-    return state.animationDuration
+  animationsDuration(state) {
+    return state.animationsDuration
   }
 }
 
@@ -34,8 +34,8 @@ export const mutations = {
   updateFilterValue(state, filterValue) {
     state.filterValue = filterValue
   },
-  animationDuration(state, animationDuration) {
-    state.animationDuration = animationDuration
+  updateAnimationsDuration(state, animationsDuration) {
+    state.animationsDuration = animationsDuration
   },
   addTask(state, textField) {
     const value = textField.value.trim()
@@ -43,12 +43,16 @@ export const mutations = {
     state.todoList.push({
       text: value,
       id: state.todoList.length,
-      isCompleted: false
+      isCompleted: false,
+      isNew: true
     })
     textField.value = ''
   },
-  removeTask(state, id) {
-    state.todoList = state.todoList.filter((task) => task.id !== id)
+  makeLastTaskNotNew({ todoList }) {
+    todoList[todoList.length - 1].isNew = false
+  },
+  removeTask({ todoList }, id) {
+    todoList.splice(id, 1)
   },
   checkTask({ todoList }, index) {
     const task = todoList[index]
@@ -60,20 +64,8 @@ export const mutations = {
 }
 
 export const actions = {
-  removeTask({ commit, state }, [$el, id]) {
-    $el.classList.add('Task_Removed')
-    setTimeout(() => {
-      $el.classList.remove('Task_Removed')
-      commit('removeTask', id)
-      commit('matchTasksIdWithIndex')
-    }, state.animationDuration)
-  },
-  checkTask({ commit, state }, [$el, index]) {
-    if (state.filterValue === 'All') return commit('checkTask', index)
-    $el.classList.add('Task_Moved')
-    setTimeout(() => {
-      commit('checkTask', index)
-      $el.classList.remove('Task_Moved')
-    }, state.animationDuration)
+  removeTask({ commit, state }, id) {
+    commit('removeTask', id)
+    commit('matchTasksIdWithIndex')
   }
 }

@@ -1,11 +1,24 @@
 <template>
-  <v-list>
-    <todo-list-task
-      v-for="task of filteredTodoList"
-      :key="task.id"
-      :task="task"
-    />
-  </v-list>
+  <client-only>
+    <v-list v-if="filteredTodoList.length">
+      <todo-list-task
+        v-for="task of filteredTodoList"
+        :key="task.id"
+        :task="task"
+      />
+    </v-list>
+    <div v-else>
+      <span v-if="filterValue === 'Completed'">
+        No Completed Tasks!
+      </span>
+      <span v-else-if="filterValue === 'Uncompleted'">
+        No Uncompleted Tasks. Create new one!
+      </span>
+      <span v-else>
+        No Todo Tasks. Create new one!
+      </span>
+    </div>
+  </client-only>
 </template>
 
 <script>
@@ -17,6 +30,6 @@ export default {
   components: {
     TodoListTask
   },
-  computed: mapGetters('todo', ['filteredTodoList'])
+  computed: mapGetters('todo', ['filterValue', 'filteredTodoList'])
 }
 </script>

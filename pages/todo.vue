@@ -13,25 +13,12 @@
       :items="['All', 'Completed', 'Uncompleted']"
     >
     </v-select>
-    <client-only>
-      <todo-list v-if="filteredTodoList.length" />
-      <div v-else>
-        <span v-if="filterValue === 'Completed'">
-          No Completed Tasks!
-        </span>
-        <span v-else-if="filterValue === 'Uncompleted'">
-          No Uncompleted Tasks. Create new one!
-        </span>
-        <span v-else>
-          No Todo Tasks. Create new one!
-        </span>
-      </div>
-    </client-only>
+    <todo-list />
   </div>
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import TodoList from '../components/TodoList/TodoList.vue'
 
 export default {
@@ -43,7 +30,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('todo', ['todoList', 'filteredTodoList']),
+    ...mapGetters('todo', ['todoList', 'animationsDuration']),
     // v-model="filterValue"
     filterValue: {
       get() {
@@ -66,7 +53,7 @@ export default {
       localStorage.setItem('filterValue', filterValue)
     }
   },
-  // sync todoList & filterValue with localStorage
+  // sync todoList & filterValue with localStorage before mounting
   beforeMount() {
     const todoList = localStorage.getItem('todoList')
     if (todoList)
@@ -75,6 +62,13 @@ export default {
     const filterValue = localStorage.getItem('filterValue')
     if (filterValue) this.filterValue = filterValue
   },
-  methods: mapMutations('todo', ['addTask'])
+  methods: {
+    addTask(textField) {
+      this.$store.commit('todo/addTask', textField)
+      setTimeout(() => {
+        this.$store.commit('todo/makeLastTaskNotNew')
+      }, this.animationsDuration)
+    }
+  }
 }
 </script>

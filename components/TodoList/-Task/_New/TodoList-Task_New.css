@@ -1,14 +1,12 @@
-.Task.Task_Added {
-  animation-name: Task_Added;
+.Task.Task_New {
+  animation-name: Task_New;
 }
 
-@keyframes Task_Added {
+@keyframes Task_New {
   from {
-    opacity: 0;
     transform: translateX(-100vw)
   }
   to {
-    opacity: 0.5;
     transform: translateX(0)
   }
 }
