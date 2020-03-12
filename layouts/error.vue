@@ -16,10 +16,7 @@
 export default {
   layout: 'empty',
   props: {
-    error: {
-      type: Object,
-      default: null
-    }
+    error: { type: Object, default: null }
   },
   data() {
     return {

@@ -1,0 +1,14 @@
+.Task.Task_Removed {
+  animation-name: Task_Removed;
+}
+
+@keyframes Task_Removed {
+  from {
+    opacity: 1;
+    transform: translateX(0)
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100vw)
+  }
+}

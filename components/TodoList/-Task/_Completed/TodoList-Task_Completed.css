@@ -1,0 +1,12 @@
+.Task.Task_Completed {
+  animation-name: Task_Completed;
+}
+
+@keyframes Task_Completed {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.5;
+  }
+}

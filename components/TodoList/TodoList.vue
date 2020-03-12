@@ -1,36 +1,22 @@
 <template>
   <v-list>
     <todo-list-task
-      v-for="task of todoList"
+      v-for="task of filteredTodoList"
       :key="task.id"
       :task="task"
-      :is-filtered="isFiltered"
-      @remove-task="removeTask"
     />
   </v-list>
 </template>
 
 <script>
-import TodoListTask from './TodoListTask'
+import { mapGetters } from 'vuex'
+import TodoListTask from './-Task/TodoList-Task'
+
 export default {
   name: 'TodoList',
   components: {
     TodoListTask
   },
-  props: {
-    todoList: {
-      type: Array,
-      required: true
-    },
-    isFiltered: {
-      type: Boolean,
-      required: true
-    }
-  },
-  methods: {
-    removeTask(id) {
-      this.$emit('remove-task', id)
-    }
-  }
+  computed: mapGetters('todo', ['filteredTodoList'])
 }
 </script>
