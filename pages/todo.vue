@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="todo">
     <v-text-field
       v-model="textField.value"
       autocomplete="off"
@@ -30,7 +30,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('todo', ['todoList', 'animationsDuration']),
+    ...mapGetters('todo', ['todoList']),
+    ...mapGetters('settings', ['animationsDuration']),
     // v-model="filterValue"
     filterValue: {
       get() {

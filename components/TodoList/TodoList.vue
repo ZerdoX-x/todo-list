@@ -1,6 +1,9 @@
 <template>
   <client-only>
-    <v-list v-if="filteredTodoList.length">
+    <v-list
+      v-if="filteredTodoList.length"
+      style="background-color: transparent"
+    >
       <todo-list-task
         v-for="task of filteredTodoList"
         :key="task.id"

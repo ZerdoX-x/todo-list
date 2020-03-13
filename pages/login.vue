@@ -1,5 +1,5 @@
 <template>
-  <div class="signin">
+  <div class="login">
     <h1>Log in</h1>
     <v-form>
       <label>

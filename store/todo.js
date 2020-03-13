@@ -1,7 +1,6 @@
 export const state = () => ({
   todoList: [],
-  filterValue: 'All',
-  animationsDuration: 500
+  filterValue: 'All'
 })
 
 export const getters = {
@@ -21,9 +20,6 @@ export const getters = {
       default:
         return state.todoList
     }
-  },
-  animationsDuration(state) {
-    return state.animationsDuration
   }
 }
 
@@ -33,9 +29,6 @@ export const mutations = {
   },
   updateFilterValue(state, filterValue) {
     state.filterValue = filterValue
-  },
-  updateAnimationsDuration(state, animationsDuration) {
-    state.animationsDuration = animationsDuration
   },
   addTask(state, textField) {
     const value = textField.value.trim()

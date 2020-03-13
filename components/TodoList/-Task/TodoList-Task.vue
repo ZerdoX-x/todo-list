@@ -37,7 +37,10 @@ export default {
   data() {
     return { checkbox: false }
   },
-  computed: mapGetters('todo', ['animationsDuration', 'filterValue']),
+  computed: {
+    ...mapGetters('todo', ['filterValue']),
+    ...mapGetters('settings', ['animationsDuration'])
+  },
   watch: {
     task(task) {
       this.checkbox = task.isCompleted // sort all checkboxes, when task is deleted (fix)
