@@ -5,6 +5,7 @@
     </v-card-subtitle>
     <v-slider
       v-model="animationsDuration"
+      :disabled="disabled"
       class="align-center px-6 pb-5"
       :max="maxAnimationsDuration"
       :min="minAnimationsDuration"
@@ -31,45 +32,62 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   name: 'AnimationsDuration',
   data() {
     return {
       animationsDurationSliderStep: 50,
       maxAnimationsDuration: 3000,
-      minAnimationsDuration: 0
+      minAnimationsDuration: 0,
+      disabled: false, // not disabled by default
+      everChanged: false
     }
   },
   computed: {
     animationsDuration: {
       get() {
-        return this.$store.getters['settings/animationsDuration']
+        // get real value, not 0 if animations disabled (see store/settings.js 'getters/animationsDuration')
+        return this.$store.getters['settings/settings'].animationsDuration
       },
       set(animationsDuration) {
-        if (!localStorage.getItem('prefersAnimations'))
-          localStorage.setItem('prefersAnimations', '+')
-        return this.$store.commit(
-          'settings/updateAnimationsDuration',
-          animationsDuration
-        )
+        // if user tried to change animationsDuration, set 'prefersAnimations
+        if (!this.everChanged) localStorage.setItem('prefersAnimations', '+')
+        this.updateAnimationsDuration(animationsDuration)
       }
     },
     animationsDurationDefaultTickLabel() {
-      const ticks = []
+      const tickLabels = []
+      const step = this.animationsDurationSliderStep
       const range = {
         from: 0,
-        to: this.maxAnimationsDuration / this.animationsDurationSliderStep,
+        to: this.maxAnimationsDuration,
         *[Symbol.iterator]() {
-          for (let value = this.from; value <= this.to; value++) yield value
+          for (let value = this.from; value <= this.to; value += step)
+            yield value
         }
       }
       for (const iteration of range) {
-        if (iteration * this.animationsDurationSliderStep !== 500)
-          ticks.push(null)
-        else ticks.push('•')
+        if (iteration !== this.defaultSettings.animationsDuration)
+          tickLabels.push(null)
+        else tickLabels.push('•') // position point on a default value
       }
-      return ticks
+      return tickLabels // [... '•' ...]
+    },
+    ...mapGetters('settings', ['animationsEnabled', 'defaultSettings'])
+  },
+  // update state if switch value changes
+  watch: {
+    animationsEnabled(state) {
+      this.disabled = !state
     }
+  },
+  mounted() {
+    // disable slider if animationsEnabled: false
+    this.disabled = !this.animationsEnabled
+    // get if user ever tried to change animationsDuration
+    this.everChanged = localStorage.getItem('prefersAnimations')
   },
   methods: {
     increaseAnimationDuration() {
@@ -77,7 +95,8 @@ export default {
     },
     decreaseAnimationDuration() {
       this.animationsDuration -= this.animationsDurationSliderStep
-    }
+    },
+    ...mapMutations('settings', ['updateAnimationsDuration'])
   }
 }
 </script>

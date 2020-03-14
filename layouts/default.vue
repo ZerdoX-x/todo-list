@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from 'vuex'
+
 export default {
   data() {
     return {
@@ -95,22 +97,20 @@ export default {
       title: 'Your Task Manager'
     }
   },
+  computed: mapGetters('settings', ['animationsEnabled']),
   // load settings from localStorage
   beforeMount() {
     const settings = localStorage.getItem('settings')
-    if (settings)
-      this.$store.commit('settings/updateSettings', JSON.parse(settings))
+    if (settings) this.updateSettings(JSON.parse(settings))
   },
   /* Remove animations for people that prefer not to see them */
   mounted() {
-    const allTransitionsDisabled = false
     const { matches } = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed
-    if ((matches && !prefersAnimations) || allTransitionsDisabled) {
-      this.$el.classList.add('App_NoTransition')
-      this.$store.commit('settings/updateAnimationsDuration', 0)
-    }
-  }
+    const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed}
+    if (matches && !prefersAnimations)
+      this.$store.commit('settings/toggleAnimationsState', false)
+  },
+  methods: mapMutations('settings', ['updateSettings'])
 }
 </script>
 

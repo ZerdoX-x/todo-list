@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapMutations } from 'vuex'
 import TodoList from '../components/TodoList/TodoList.vue'
 
 export default {
@@ -54,11 +54,10 @@ export default {
       localStorage.setItem('filterValue', filterValue)
     }
   },
-  // sync todoList & filterValue with localStorage before mounting
+  // sync todoList & filterValue with localStorage
   beforeMount() {
     const todoList = localStorage.getItem('todoList')
-    if (todoList)
-      this.$store.commit('todo/updateTodoList', JSON.parse(todoList))
+    if (todoList) this.updateTodoList(JSON.parse(todoList))
 
     const filterValue = localStorage.getItem('filterValue')
     if (filterValue) this.filterValue = filterValue
@@ -67,9 +66,10 @@ export default {
     addTask(textField) {
       this.$store.commit('todo/addTask', textField)
       setTimeout(() => {
-        this.$store.commit('todo/makeLastTaskNotNew')
+        this.makeLastTaskNotNew()
       }, this.animationsDuration)
-    }
+    },
+    ...mapMutations('todo', ['updateTodoList', 'makeLastTaskNotNew'])
   }
 }
 </script>
