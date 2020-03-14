@@ -1,15 +1,23 @@
 export const state = () => ({
-  animationsDuration: 500
+  settings: {
+    animationsDuration: 500
+  }
 })
 
 export const getters = {
-  animationsDuration(state) {
-    return state.animationsDuration
+  settings(state) {
+    return state.settings
+  },
+  animationsDuration({ settings }) {
+    return settings.animationsDuration
   }
 }
 
 export const mutations = {
-  updateAnimationsDuration(state, animationsDuration) {
-    state.animationsDuration = animationsDuration
+  updateSettings(state, settings) {
+    state.settings = settings
+  },
+  updateAnimationsDuration({ settings }, animationsDuration) {
+    settings.animationsDuration = animationsDuration
   }
 }

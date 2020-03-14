@@ -4,11 +4,7 @@
       v-if="filteredTodoList.length"
       style="background-color: transparent"
     >
-      <todo-list-task
-        v-for="task of filteredTodoList"
-        :key="task.id"
-        :task="task"
-      />
+      <task v-for="task of filteredTodoList" :key="task.id" :task="task" />
     </v-list>
     <div v-else>
       <span v-if="filterValue === 'Completed'">
@@ -26,12 +22,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import TodoListTask from './-Task/TodoList-Task'
+import Task from './-Task/TodoList-Task'
 
 export default {
   name: 'TodoList',
   components: {
-    TodoListTask
+    Task
   },
   computed: mapGetters('todo', ['filterValue', 'filteredTodoList'])
 }

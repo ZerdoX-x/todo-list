@@ -25,7 +25,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'TodoListTask',
+  name: 'Task',
   filters: {
     startsWithCapitalLetter(string) {
       return string.replace(string[0], string[0].toUpperCase())
