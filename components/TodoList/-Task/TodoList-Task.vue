@@ -84,6 +84,7 @@ export default {
 
 .Task {
   will-change: transform, opacity;
+  animation-fill-mode: forwards;
   background: #1e1e1e;
 }
 </style>

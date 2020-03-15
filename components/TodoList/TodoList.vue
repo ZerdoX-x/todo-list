@@ -2,7 +2,8 @@
   <client-only>
     <v-list
       v-if="filteredTodoList.length"
-      style="background-color: transparent"
+      class="TodoList"
+      :style="{ animationDuration: animationsDuration + 'ms' }"
     >
       <task v-for="task of filteredTodoList" :key="task.id" :task="task" />
     </v-list>
@@ -29,6 +30,18 @@ export default {
   components: {
     Task
   },
-  computed: mapGetters('todo', ['filterValue', 'filteredTodoList'])
+  computed: {
+    ...mapGetters('todo', ['filterValue', 'filteredTodoList']),
+    ...mapGetters('settings', ['animationsDuration'])
+  }
 }
 </script>
+
+<style>
+@import './_Removed/TodoList_Removed.css';
+
+.TodoList {
+  animation-fill-mode: forwards;
+  background-color: transparent !important;
+}
+</style>

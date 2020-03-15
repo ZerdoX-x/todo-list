@@ -42,10 +42,22 @@ export const mutations = {
     textField.value = ''
   },
   makeLastTaskNotNew({ todoList }) {
-    todoList[todoList.length - 1].isNew = false
+    const lastTask = todoList[todoList.length - 1]
+    lastTask.isNew = false
+    delete lastTask.isNew
   },
-  removeTask({ todoList }, id) {
-    todoList.splice(id, 1)
+  removeAllTasks(state) {
+    state.todoList = []
+  },
+  removeCompletedTasks(state) {
+    state.todoList = state.todoList.filter((task) => !task.isCompleted)
+  },
+  removeUncompletedTasks(state) {
+    state.todoList = state.todoList.filter((task) => task.isCompleted)
+  },
+  removeTask(state, id) {
+    state.todoList = state.todoList.filter((task) => task.id !== id)
+    // state.todoList.splice(id, 1)
   },
   checkTask({ todoList }, index) {
     const task = todoList[index]
@@ -57,8 +69,14 @@ export const mutations = {
 }
 
 export const actions = {
-  removeTask({ commit, state }, id) {
+  removeTask({ commit }, id) {
     commit('removeTask', id)
     commit('matchTasksIdWithIndex')
+  },
+  addTask({ commit, rootGetters }, textField) {
+    commit('addTask', textField)
+    setTimeout(() =>
+      commit('makeLastTaskNotNew', rootGetters['settings/animationsDuration'])
+    )
   }
 }

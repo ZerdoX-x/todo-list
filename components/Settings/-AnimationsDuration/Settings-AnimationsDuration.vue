@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       animationsDurationSliderStep: 50,
-      maxAnimationsDuration: 3000,
+      maxAnimationsDuration: 2000,
       minAnimationsDuration: 0,
       disabled: false, // not disabled by default
       everChanged: false
