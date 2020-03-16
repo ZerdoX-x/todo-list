@@ -11,7 +11,7 @@
         Default value: ${defaultSettings.animationsEnabled ? 'on' : 'off'}`
       "
       @change="toggleAnimationsState"
-    ></v-switch>
+    />
   </v-card>
 </template>
 
@@ -20,9 +20,7 @@ import { mapMutations, mapGetters } from 'vuex'
 
 export default {
   name: 'AnimationsState',
-  data() {
-    return { checkbox: true }
-  },
+  data: () => ({ checkbox: false }),
   computed: mapGetters('settings', ['animationsEnabled', 'defaultSettings']),
   watch: {
     checkbox(enabled) {
@@ -33,9 +31,6 @@ export default {
   mounted() {
     this.checkbox = this.animationsEnabled
   },
-  methods: mapMutations('settings', [
-    'toggleAnimationsState',
-    'updateAnimationsDuration'
-  ])
+  methods: mapMutations('settings', ['toggleAnimationsState'])
 }
 </script>

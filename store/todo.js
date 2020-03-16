@@ -73,6 +73,14 @@ export const actions = {
     commit('removeTask', id)
     commit('matchTasksIdWithIndex')
   },
+  removeCompletedTasks({ commit }) {
+    commit('removeCompletedTasks')
+    commit('matchTasksIdWithIndex')
+  },
+  removeUncompletedTasks({ commit }) {
+    commit('removeUncompletedTasks')
+    commit('matchTasksIdWithIndex')
+  },
   addTask({ commit, rootGetters }, textField) {
     commit('addTask', textField)
     setTimeout(() =>

@@ -1,9 +1,9 @@
 <template>
-  <v-app dark>
-    <h1 v-if="error.statusCode === 404">
+  <v-app>
+    <h1 v-if="error.statusCode === 404" class="error-heading">
       {{ pageNotFound }}
     </h1>
-    <h1 v-else>
+    <h1 v-else class="error-heading">
       {{ otherError }}
     </h1>
     <NuxtLink to="/">
@@ -18,12 +18,10 @@ export default {
   props: {
     error: { type: Object, default: null }
   },
-  data() {
-    return {
-      pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
-    }
-  },
+  data: () => ({
+    pageNotFound: '404 Not Found',
+    otherError: 'An error occurred'
+  }),
   head() {
     const title =
       this.error.statusCode === 404 ? this.pageNotFound : this.otherError
@@ -34,8 +32,8 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
+<style>
+.error-heading {
   font-size: 20px;
 }
 </style>

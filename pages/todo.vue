@@ -10,43 +10,47 @@
       @click:append="textField.value = ''"
       @keyup.enter="addTask(textField)"
     />
-    <v-card class="mb-6">
-      <v-menu transition="slide-y-transition" bottom :offset-y="true">
-        <template v-slot:activator="{ on }">
-          <v-btn :disabled="!todoList.length" dark v-on="on">
-            Remove...
-          </v-btn>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="(item, index) in setOfTasksItems"
-            :key="index"
-            :disabled="item.disabled"
-            @click="
-              () => {
-                dialog.show = true
-                dialog.agreeHandler = item.handler
+    <v-menu transition="slide-y-transition" bottom :offset-y="true">
+      <template v-slot:activator="{ on }">
+        <v-btn :disabled="!todoList.length" v-on="on">
+          Remove...
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in setOfTasksItems"
+          :key="index"
+          :disabled="item.disabled"
+          @click="
+            () => {
+              if (!deleteWarning) return item.handler() // do not show dialog if they're disabled
+              dialog.show = true
+              dialog.agreeHandler = () => {
+                dialog.show = false
+                if (deleteWarningCheckbox) toggleDeleteWarningState(false) // commit to store
+                item.handler()
               }
-            "
-          >
-            <v-list-item-title>{{ item.text }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </v-card>
+            }
+          "
+        >
+          <v-list-item-title>{{ item.text }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
     <v-select
       v-model="filterValue"
       :items="['All', 'Completed', 'Uncompleted']"
     >
     </v-select>
-    <v-dialog v-model="dialog.show" persistent max-width="290">
+    <v-dialog v-model="dialog.show" persistent max-width="340">
       <v-card>
         <v-card-title class="headline">Are you sure?</v-card-title>
         <v-card-text>You want to remove set of tasks</v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="dialog.show = false">Disagree</v-btn>
-          <v-btn @click="dialog.agreeHandler">Agree</v-btn>
+          <v-checkbox v-model="deleteWarningCheckbox" label="Don't warn" />
+          <v-spacer />
+          <v-btn @click="dialog.show = false">No</v-btn>
+          <v-btn @click="dialog.agreeHandler">Yes</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -61,18 +65,17 @@ import TodoList from '../components/TodoList/TodoList.vue'
 export default {
   name: 'Todo',
   components: { TodoList },
-  data() {
-    return {
-      dialog: {
-        show: false,
-        agreeHandler: () => {}
-      },
-      textField: { value: '' }
-    }
-  },
+  data: () => ({
+    dialog: {
+      show: false,
+      agreeHandler: () => {}
+    },
+    textField: { value: '' },
+    deleteWarningCheckbox: false
+  }),
   computed: {
     ...mapGetters('todo', ['todoList']),
-    ...mapGetters('settings', ['animationsDuration']),
+    ...mapGetters('settings', ['animationsDuration', 'deleteWarning']),
     // v-model="filterValue"
     filterValue: {
       get() {
@@ -108,13 +111,6 @@ export default {
     todoList: {
       deep: true,
       handler(todoList) {
-        // const completedTasksBtn = this.setOfTasksItems.filter(
-        //   ({ text }) => text === 'Completed Tasks'
-        // )
-        // console.log(completedTasksBtn)
-        // completedTasksBtn.disabled = Boolean(
-        //   todoList.map(({ isCompleted }) => isCompleted).length
-        // )
         // save todoList & filterValue to localStorage
         localStorage.setItem('todoList', JSON.stringify(todoList))
       }
@@ -133,37 +129,35 @@ export default {
   },
   methods: {
     removeAllTasks() {
-      const { $el } = this.$children[this.$children.length - 1] // TodoList component
-      this.dialog.show = false
-      $el.classList.add('TodoList_Removed')
+      const todoList = this.$children[this.$children.length - 1].$el // TodoList component's element
+      todoList.classList.add('TodoList_Removed')
       setTimeout(() => {
         this.$store.commit('todo/removeAllTasks')
-        $el.classList.remove('TodoList_Removed')
+        todoList.classList.remove('TodoList_Removed')
       }, this.animationsDuration)
     },
     removeUncompletedTasks() {
       const todoList = this.$children[this.$children.length - 1].$children[0]
         .$children // array of TodoList-Task.vue components
-      this.dialog.show = false
       todoList.forEach((value) => {
         if (!value.task.isCompleted) value.$el.classList.add('Task_Removed') // add Task_Removed for uncompleted tasks
       })
       setTimeout(() => {
-        this.$store.commit('todo/removeUncompletedTasks')
+        this.$store.dispatch('todo/removeUncompletedTasks')
       }, this.animationsDuration)
     },
     removeCompletedTasks() {
       const todoList = this.$children[this.$children.length - 1].$children[0]
         .$children // array of TodoList-Task.vue components
-      this.dialog.show = false
       todoList.forEach((value) => {
         if (value.task.isCompleted) value.$el.classList.add('Task_Removed') // add Task_Removed for uncompleted tasks
       })
       setTimeout(() => {
-        this.$store.commit('todo/removeCompletedTasks')
+        this.$store.dispatch('todo/removeCompletedTasks')
       }, this.animationsDuration)
     },
     ...mapActions('todo', ['addTask', 'removeTask']),
+    ...mapMutations('settings', ['toggleDeleteWarningState']),
     ...mapMutations('todo', ['updateTodoList', 'makeLastTaskNotNew'])
   }
 }

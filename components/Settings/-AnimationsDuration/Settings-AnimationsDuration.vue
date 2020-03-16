@@ -21,7 +21,6 @@
           mdi-minus
         </v-icon>
       </template>
-
       <template v-slot:append>
         <v-icon @click="increaseAnimationDuration">
           mdi-plus
@@ -36,15 +35,13 @@ import { mapGetters, mapMutations } from 'vuex'
 
 export default {
   name: 'AnimationsDuration',
-  data() {
-    return {
-      animationsDurationSliderStep: 50,
-      maxAnimationsDuration: 2000,
-      minAnimationsDuration: 0,
-      disabled: false, // not disabled by default
-      everChanged: false
-    }
-  },
+  data: () => ({
+    animationsDurationSliderStep: 50,
+    maxAnimationsDuration: 2000,
+    minAnimationsDuration: 0,
+    disabled: false, // not disabled by default
+    everChanged: false
+  }),
   computed: {
     animationsDuration: {
       get() {

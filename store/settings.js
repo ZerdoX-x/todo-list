@@ -1,11 +1,15 @@
 export const state = () => ({
   settings: {
     animationsDuration: 500,
-    animationsEnabled: true
+    animationsEnabled: true,
+    deleteWarning: true,
+    theme: 'dark'
   },
   defaultSettings: Object.freeze({
     animationsDuration: 500,
-    animationsEnabled: true
+    animationsEnabled: true,
+    deleteWarning: true,
+    theme: 'dark'
   })
 })
 
@@ -22,6 +26,12 @@ export const getters = {
   },
   animationsEnabled({ settings }) {
     return settings.animationsEnabled
+  },
+  deleteWarning({ settings }) {
+    return settings.deleteWarning
+  },
+  theme({ settings }) {
+    return settings.theme
   }
 }
 
@@ -34,5 +44,11 @@ export const mutations = {
   },
   toggleAnimationsState({ settings }, animationsState) {
     settings.animationsEnabled = animationsState
+  },
+  toggleDeleteWarningState({ settings }, deleteWarningState) {
+    settings.deleteWarning = deleteWarningState
+  },
+  toggleTheme({ settings }, theme) {
+    settings.theme = theme
   }
 }

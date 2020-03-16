@@ -3,7 +3,8 @@
     :class="{ Task_Completed: task.isCompleted }"
     :style="{
       animationDuration: animationsDuration + 'ms',
-      transitionDuration: animationsDuration + 'ms'
+      transitionDuration: animationsDuration + 'ms',
+      background: $vuetify.theme.dark ? '#1e1e1e' : '#f1f1f1'
     }"
     class="TodoList-Task Task"
   >
@@ -14,7 +15,7 @@
       v-model="checkbox"
       class="ml-auto"
       @change="checkTask(task.id)"
-    ></v-checkbox>
+    />
     <v-btn icon fab @click="removeTask(task.id)">
       <v-icon>mdi-close-circle</v-icon>
     </v-btn>
@@ -27,16 +28,13 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Task',
   filters: {
-    startsWithCapitalLetter(string) {
-      return string.replace(string[0], string[0].toUpperCase())
-    }
+    startsWithCapitalLetter: (string) =>
+      string.replace(string[0], string[0].toUpperCase())
   },
   props: {
     task: { type: Object, required: true }
   },
-  data() {
-    return { checkbox: false }
-  },
+  data: () => ({ checkbox: false }),
   computed: {
     ...mapGetters('todo', ['filterValue']),
     ...mapGetters('settings', ['animationsDuration'])
@@ -85,6 +83,5 @@ export default {
 .Task {
   will-change: transform, opacity;
   animation-fill-mode: forwards;
-  background: #1e1e1e;
 }
 </style>
