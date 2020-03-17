@@ -8,9 +8,6 @@
 export default {
   name: 'Loader',
   data: () => ({ loading: false }),
-  mounted() {
-    console.log(this)
-  },
   methods: {
     start() {
       this.loading = true

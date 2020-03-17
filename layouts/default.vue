@@ -111,28 +111,31 @@ export default {
     title: 'Your Task Manager'
   }),
   computed: mapGetters('settings', ['settings', 'animationsEnabled', 'theme']),
-  // push settings to localStorage
+  // push settings to cookies
   watch: {
     settings: {
       deep: true,
       handler(settings) {
-        localStorage.setItem('settings', JSON.stringify(settings))
+        settings = JSON.stringify(settings)
+        localStorage.setItem('settings', settings)
+        document.cookie = `settings=${encodeURIComponent(
+          settings
+        )};path=/;max-age=${Date.now() + 365 * 24 * 60 * 60}`
       }
     }
   },
-  beforeCreate() {
-    if (process.browser) {
-      const theme = JSON.parse(localStorage.getItem('settings')).theme
-      if (theme) this.$vuetify.theme.dark = theme === 'dark'
+  // set settings on server from user's cookies
+  middleware(context) {
+    if (process.server) {
+      const settings = context.app.$cookies.get('settings')
+      context.store.commit('settings/updateSettings', settings)
+      context.app.vuetify.framework.theme.isDark = settings.theme === 'dark'
     }
   },
-  // load settings from localStorage
-  beforeMount() {
-    const settings = localStorage.getItem('settings')
-    if (settings) this.updateSettings(JSON.parse(settings))
-  },
-  // Remove animations for people that prefer not to see them
   mounted() {
+    // mount theme from cookies
+    this.$vuetify.theme.isDark = this.$cookies.get('settings').theme === 'dark'
+    // Remove animations for people that prefer not to see them
     const { matches } = window.matchMedia('(prefers-reduced-motion: reduce)')
     const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed}
     if (matches && !prefersAnimations)
