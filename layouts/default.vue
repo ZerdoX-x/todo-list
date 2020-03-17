@@ -125,16 +125,19 @@ export default {
     }
   },
   // set settings on server from user's cookies
-  middleware(context) {
+  middleware({ app, store }) {
     if (process.server) {
-      const settings = context.app.$cookies.get('settings')
-      context.store.commit('settings/updateSettings', settings)
-      context.app.vuetify.framework.theme.isDark = settings.theme === 'dark'
+      const settings = app.$cookies.get('settings')
+      if (settings) {
+        store.commit('settings/updateSettings', settings)
+        app.vuetify.framework.theme.isDark = settings.theme === 'dark'
+      }
     }
   },
   mounted() {
     // mount theme from cookies
-    this.$vuetify.theme.isDark = this.$cookies.get('settings').theme === 'dark'
+    const settings = this.$cookies.get('settings')
+    if (settings) this.$vuetify.theme.isDark = settings.theme === 'dark'
     // Remove animations for people that prefer not to see them
     const { matches } = window.matchMedia('(prefers-reduced-motion: reduce)')
     const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed}
