@@ -80,9 +80,11 @@ export default {
       this.disabled = !state
     }
   },
-  mounted() {
+  created() {
     // disable slider if animationsEnabled: false
     this.disabled = !this.animationsEnabled
+  },
+  mounted() {
     // get if user ever tried to change animationsDuration
     this.everChanged = localStorage.getItem('prefersAnimations')
   },

@@ -25,10 +25,13 @@ export default {
   watch: {
     checkbox(enabled) {
       this.toggleDeleteWarningState(enabled)
+    },
+    deleteWarning: {
+      immediate: true,
+      handler(enabled) {
+        this.checkbox = enabled
+      }
     }
-  },
-  mounted() {
-    this.checkbox = this.deleteWarning
   },
   methods: mapMutations('settings', ['toggleDeleteWarningState'])
 }

@@ -22,8 +22,13 @@ export default {
   name: 'AppearanceTheme',
   data: () => ({ checked: false }),
   computed: mapGetters('settings', ['theme', 'defaultSettings']),
-  mounted() {
-    this.checked = this.theme === 'dark'
+  watch: {
+    theme: {
+      immediate: true,
+      handler(theme) {
+        this.checked = theme === 'dark'
+      }
+    }
   },
   methods: {
     toggleTheme(isDark) {

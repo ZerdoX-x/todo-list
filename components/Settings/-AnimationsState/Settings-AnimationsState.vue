@@ -26,10 +26,13 @@ export default {
     checkbox(enabled) {
       if (!enabled) this.$root.$el.classList.add('App_NoTransition')
       else this.$root.$el.classList.remove('App_NoTransition')
+    },
+    animationsEnabled: {
+      immediate: true,
+      handler(animationsEnabled) {
+        this.checkbox = animationsEnabled
+      }
     }
-  },
-  mounted() {
-    this.checkbox = this.animationsEnabled
   },
   methods: mapMutations('settings', ['toggleAnimationsState'])
 }
