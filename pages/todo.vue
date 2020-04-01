@@ -65,6 +65,7 @@ import TodoList from '../components/TodoList/TodoList.vue'
 export default {
   name: 'Todo',
   components: { TodoList },
+  transitions: 'page',
   data: () => ({
     dialog: {
       show: false,

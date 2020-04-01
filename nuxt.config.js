@@ -32,7 +32,7 @@ export default {
   /*
    ** Global CSS
    */
-  css: [],
+  css: ['./styles/page-transition.css'],
   /*
    ** Plugins to load before mounting the App
    */

@@ -4,6 +4,7 @@
 
 <script>
 export default {
-  name: 'About'
+  name: 'About',
+  transitions: 'page'
 }
 </script>

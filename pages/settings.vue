@@ -28,6 +28,7 @@ import AppearanceTheme from '../components/Settings/-AppearanceTheme/Settings-Ap
 
 export default {
   name: 'Settings',
+  transitions: 'page',
   components: {
     AnimationsDuration,
     AnimationsState,

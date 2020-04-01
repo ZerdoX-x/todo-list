@@ -18,12 +18,7 @@
         </v-list-item>
         <v-list-item
           style="position: absolute; bottom: 0; width: 100%; transform: translateY(-100%)"
-          @click.stop="
-            () => {
-              $vuetify.theme.dark = !$vuetify.theme.dark
-              toggleTheme($vuetify.theme.dark ? 'dark' : 'light')
-            }
-          "
+          @click.stop="toggleTheme(theme === 'dark' ? 'light' : 'dark')"
         >
           <v-list-item-action>
             <v-icon>
@@ -121,6 +116,12 @@ export default {
         document.cookie = `settings=${encodeURIComponent(
           settings
         )};path=/;max-age=${Date.now() + 365 * 24 * 60 * 60}`
+      }
+    },
+    theme: {
+      immediate: true,
+      handler(theme) {
+        this.$vuetify.theme.dark = theme === 'dark'
       }
     }
   },

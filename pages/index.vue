@@ -19,6 +19,7 @@
 <script>
 export default {
   name: 'Index',
+  transitions: 'page',
   data: () => ({
     links: [
       {
@@ -41,6 +42,10 @@ export default {
       {
         text: '@vladimir_porotnikov (tg)',
         href: 'tg://vladimir_porotnikov'
+      },
+      {
+        text: 'source code',
+        href: 'https://github.com/zerdox-x/todo-list'
       }
     ]
   })

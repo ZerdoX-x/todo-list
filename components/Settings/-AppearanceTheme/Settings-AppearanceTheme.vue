@@ -4,36 +4,31 @@
       Switch between dark/light themes
     </v-card-subtitle>
     <v-switch
-      v-model="checked"
+      v-model="theme"
       class="px-6 pb-5 mt-0"
       :label="
-        `Theme: ${checked ? 'dark' : 'light'}.
-        Default theme: ${defaultSettings.theme === 'dark' ? 'dark' : 'light'}`
+        `Theme: ${theme ? 'dark' : 'false'}.
+        Default theme: ${
+          $store.getters['settings/defaultSettings'].theme === 'dark'
+            ? 'dark'
+            : 'light'
+        }`
       "
-      @change="toggleTheme(checked)"
     />
   </v-card>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   name: 'AppearanceTheme',
-  data: () => ({ checked: false }),
-  computed: mapGetters('settings', ['theme', 'defaultSettings']),
-  watch: {
+  computed: {
     theme: {
-      immediate: true,
-      handler(theme) {
-        this.checked = theme === 'dark'
+      get() {
+        return this.$store.getters['settings/theme'] === 'dark'
+      },
+      set(isDark) {
+        this.$store.commit('settings/toggleTheme', isDark ? 'dark' : 'light')
       }
-    }
-  },
-  methods: {
-    toggleTheme(isDark) {
-      this.$vuetify.theme.dark = isDark
-      this.$store.commit('settings/toggleTheme', isDark ? 'dark' : 'light')
     }
   }
 }
