@@ -16,6 +16,7 @@
       <v-card-subtitle>Appearance</v-card-subtitle>
       <v-divider />
       <appearance-theme />
+      <appearance-mini-variant />
     </v-card>
   </div>
 </template>
@@ -25,6 +26,7 @@ import AnimationsDuration from '../components/Settings/-AnimationsDuration/Setti
 import AnimationsState from '../components/Settings/-AnimationsState/Settings-AnimationsState'
 import TodoListDeleteWarning from '../components/Settings/-TodoListDeleteWarning/Settings-TodoListDeleteWarning'
 import AppearanceTheme from '../components/Settings/-AppearanceTheme/Settings-AppearanceTheme'
+import AppearanceMiniVariant from '../components/Settings/-AppearanceMiniVariant/Settings-AppearanceMiniVariant'
 
 export default {
   name: 'Settings',
@@ -33,7 +35,8 @@ export default {
     AnimationsDuration,
     AnimationsState,
     TodoListDeleteWarning,
-    AppearanceTheme
+    AppearanceTheme,
+    AppearanceMiniVariant
   }
 }
 </script>

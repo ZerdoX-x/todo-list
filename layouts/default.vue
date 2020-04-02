@@ -100,12 +100,21 @@ export default {
         to: '/about'
       }
     ],
-    miniVariant: false,
     right: true,
     rightDrawer: false,
     title: 'Your Task Manager'
   }),
-  computed: mapGetters('settings', ['settings', 'animationsEnabled', 'theme']),
+  computed: {
+    ...mapGetters('settings', ['settings', 'animationsEnabled', 'theme']),
+    miniVariant: {
+      get() {
+        return this.$store.getters['settings/miniVariant']
+      },
+      set(miniVariant) {
+        this.$store.commit('settings/toggleMiniVariant', miniVariant)
+      }
+    }
+  },
   // push settings to cookies
   watch: {
     settings: {

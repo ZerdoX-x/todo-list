@@ -3,13 +3,15 @@ export const state = () => ({
     animationsDuration: 500,
     animationsEnabled: true,
     deleteWarning: true,
-    theme: 'dark'
+    theme: 'dark',
+    miniVariant: false
   },
   defaultSettings: Object.freeze({
     animationsDuration: 500,
     animationsEnabled: true,
     deleteWarning: true,
-    theme: 'dark'
+    theme: 'dark',
+    miniVariant: false
   })
 })
 
@@ -32,6 +34,9 @@ export const getters = {
   },
   theme({ settings }) {
     return settings.theme
+  },
+  miniVariant({ settings }) {
+    return settings.miniVariant
   }
 }
 
@@ -50,5 +55,8 @@ export const mutations = {
   },
   toggleTheme({ settings }, theme) {
     settings.theme = theme
+  },
+  toggleMiniVariant({ settings }, miniVariant) {
+    settings.miniVariant = miniVariant
   }
 }
