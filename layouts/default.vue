@@ -18,7 +18,9 @@
         </v-list-item>
         <v-list-item
           style="position: absolute; bottom: 0; width: 100%; transform: translateY(-100%)"
-          @click.stop="toggleTheme(theme === 'dark' ? 'light' : 'dark')"
+          @click.stop="
+            toggleTheme(settings.theme === 'dark' ? 'light' : 'dark')
+          "
         >
           <v-list-item-action>
             <v-icon>
@@ -61,7 +63,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   data: () => ({
@@ -105,10 +107,10 @@ export default {
     title: 'Your Task Manager'
   }),
   computed: {
-    ...mapGetters('settings', ['settings', 'animationsEnabled', 'theme']),
+    ...mapState('settings', ['settings']),
     miniVariant: {
       get() {
-        return this.$store.getters['settings/miniVariant']
+        return this.$store.state.settings.settings.miniVariant
       },
       set(miniVariant) {
         this.$store.commit('settings/toggleMiniVariant', miniVariant)
@@ -121,13 +123,12 @@ export default {
       deep: true,
       handler(settings) {
         settings = JSON.stringify(settings)
-        localStorage.setItem('settings', settings)
         document.cookie = `settings=${encodeURIComponent(
           settings
         )};path=/;max-age=${Date.now() + 365 * 24 * 60 * 60}`
       }
     },
-    theme: {
+    'settings.theme': {
       immediate: true,
       handler(theme) {
         this.$vuetify.theme.dark = theme === 'dark'
@@ -150,7 +151,7 @@ export default {
     if (settings) this.$vuetify.theme.isDark = settings.theme === 'dark'
     // Remove animations for people that prefer not to see them
     const { matches } = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed}
+    const prefersAnimations = localStorage.getItem('prefersAnimations') // true if animationsDuration changed
     if (matches && !prefersAnimations)
       this.$store.commit('settings/toggleAnimationsState', false)
   },

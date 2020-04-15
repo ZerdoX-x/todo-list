@@ -7,9 +7,9 @@
       v-model="theme"
       class="px-6 pb-5 mt-0"
       :label="
-        `Theme: ${theme ? 'dark' : 'false'}.
+        `Theme: ${theme ? 'dark' : 'light'}.
         Default theme: ${
-          $store.getters['settings/defaultSettings'].theme === 'dark'
+          $store.state.settings.defaultSettings.theme === 'dark'
             ? 'dark'
             : 'light'
         }`
@@ -24,7 +24,7 @@ export default {
   computed: {
     theme: {
       get() {
-        return this.$store.getters['settings/theme'] === 'dark'
+        return this.$store.state.settings.settings.theme === 'dark'
       },
       set(isDark) {
         this.$store.commit('settings/toggleTheme', isDark ? 'dark' : 'light')

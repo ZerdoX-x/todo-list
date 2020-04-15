@@ -2,8 +2,8 @@
   <v-list-item
     :class="{ Task_Completed: task.isCompleted }"
     :style="{
-      animationDuration: animationsDuration + 'ms',
-      transitionDuration: animationsDuration + 'ms',
+      animationDuration: settings.animationsDuration + 'ms',
+      transitionDuration: settings.animationsDuration + 'ms',
       background: $vuetify.theme.dark ? '#1e1e1e' : '#f1f1f1'
     }"
     class="TodoList-Task Task"
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Task',
@@ -36,8 +36,8 @@ export default {
   },
   data: () => ({ checkbox: false }),
   computed: {
-    ...mapGetters('todo', ['filterValue']),
-    ...mapGetters('settings', ['animationsDuration'])
+    ...mapState('todo', ['filterValue']),
+    ...mapState('settings', ['settings'])
   },
   watch: {
     task(task) {
@@ -50,7 +50,7 @@ export default {
     this.$el.classList.add('Task_New')
     setTimeout(() => {
       this.$el.classList.remove('Task_New')
-    }, this.animationsDuration)
+    }, this.settings.animationsDuration)
   },
   methods: {
     removeTask(id) {
@@ -58,7 +58,7 @@ export default {
       setTimeout(() => {
         this.$store.dispatch('todo/removeTask', id)
         this.$el.classList.remove('Task_Removed')
-      }, this.animationsDuration)
+      }, this.settings.animationsDuration)
     },
     checkTask(index) {
       if (this.filterValue === 'All')
@@ -68,7 +68,7 @@ export default {
       setTimeout(() => {
         this.$store.commit('todo/checkTask', index)
         this.$el.classList.remove('Task_Moved')
-      }, this.animationsDuration)
+      }, this.settings.animationsDuration)
     }
   }
 }

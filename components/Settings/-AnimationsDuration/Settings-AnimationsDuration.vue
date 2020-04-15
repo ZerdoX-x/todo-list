@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'AnimationsDuration',
@@ -46,10 +46,10 @@ export default {
     animationsDuration: {
       get() {
         // get real value, not 0 if animations disabled (see store/settings.js 'getters/animationsDuration')
-        return this.$store.getters['settings/settings'].animationsDuration
+        return this.$store.state.settings.settings.animationsDuration
       },
       set(animationsDuration) {
-        // if user tried to change animationsDuration, set 'prefersAnimations
+        // if user tried to change animationsDuration, set 'prefersAnimations'
         if (!this.everChanged) localStorage.setItem('prefersAnimations', '+')
         this.updateAnimationsDuration(animationsDuration)
       }
@@ -72,17 +72,17 @@ export default {
       }
       return tickLabels // [... '•' ...]
     },
-    ...mapGetters('settings', ['animationsEnabled', 'defaultSettings'])
+    ...mapState('settings', ['settings', 'defaultSettings'])
   },
   // update state if switch value changes
   watch: {
-    animationsEnabled(state) {
+    'settings.animationsEnabled'(state) {
       this.disabled = !state
     }
   },
   created() {
     // disable slider if animationsEnabled: false
-    this.disabled = !this.animationsEnabled
+    this.disabled = !this.settings.animationsEnabled
   },
   mounted() {
     // get if user ever tried to change animationsDuration

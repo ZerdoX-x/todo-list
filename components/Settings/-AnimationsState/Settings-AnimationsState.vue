@@ -16,18 +16,18 @@
 </template>
 
 <script>
-import { mapMutations, mapGetters } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'AnimationsState',
   data: () => ({ checkbox: false }),
-  computed: mapGetters('settings', ['animationsEnabled', 'defaultSettings']),
+  computed: mapState('settings', ['settings', 'defaultSettings']),
   watch: {
     checkbox(enabled) {
       if (!enabled) this.$root.$el.classList.add('App_NoTransition')
       else this.$root.$el.classList.remove('App_NoTransition')
     },
-    animationsEnabled: {
+    'settings.animationsEnabled': {
       immediate: true,
       handler(animationsEnabled) {
         this.checkbox = animationsEnabled

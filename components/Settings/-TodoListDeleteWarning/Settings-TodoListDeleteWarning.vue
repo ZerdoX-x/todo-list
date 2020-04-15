@@ -16,17 +16,17 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'TodoListDeleteWarning',
   data: () => ({ checkbox: false }),
-  computed: mapGetters('settings', ['deleteWarning', 'defaultSettings']),
+  computed: mapState('settings', ['settings', 'defaultSettings']),
   watch: {
     checkbox(enabled) {
       this.toggleDeleteWarningState(enabled)
     },
-    deleteWarning: {
+    'settings.deleteWarning': {
       immediate: true,
       handler(enabled) {
         this.checkbox = enabled

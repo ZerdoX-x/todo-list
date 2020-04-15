@@ -8,7 +8,7 @@
       class="px-6 pb-5 mt-0"
       :label="
         `Condensed: ${miniVariant}.
-        Default value: ${$store.getters['settings/defaultSettings'].miniVariant}`
+        Default value: ${$store.state.settings.defaultSettings.miniVariant}`
       "
     />
   </v-card>
@@ -20,7 +20,7 @@ export default {
   computed: {
     miniVariant: {
       get() {
-        return this.$store.getters['settings/miniVariant']
+        return this.$store.state.settings.settings.miniVariant
       },
       set(miniVariant) {
         this.$store.commit('settings/toggleMiniVariant', miniVariant)

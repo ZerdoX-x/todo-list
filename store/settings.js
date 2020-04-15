@@ -16,27 +16,8 @@ export const state = () => ({
 })
 
 export const getters = {
-  settings(state) {
-    return state.settings
-  },
-  defaultSettings(state) {
-    return state.defaultSettings
-  },
   animationsDuration({ settings }) {
-    if (!settings.animationsEnabled) return 0
-    return settings.animationsDuration
-  },
-  animationsEnabled({ settings }) {
-    return settings.animationsEnabled
-  },
-  deleteWarning({ settings }) {
-    return settings.deleteWarning
-  },
-  theme({ settings }) {
-    return settings.theme
-  },
-  miniVariant({ settings }) {
-    return settings.miniVariant
+    return !settings.animationsEnabled ? 0 : settings.animationsDuration // if animations disabled return 0
   }
 }
 

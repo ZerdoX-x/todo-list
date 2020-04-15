@@ -4,12 +4,6 @@ export const state = () => ({
 })
 
 export const getters = {
-  todoList(state) {
-    return state.todoList
-  },
-  filterValue(state) {
-    return state.filterValue
-  },
   filteredTodoList(state) {
     switch (state.filterValue) {
       case 'Completed':

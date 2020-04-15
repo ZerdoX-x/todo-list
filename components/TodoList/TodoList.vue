@@ -3,7 +3,7 @@
     <v-list
       v-if="filteredTodoList.length"
       class="TodoList"
-      :style="{ animationDuration: animationsDuration + 'ms' }"
+      :style="{ animationDuration: settings.animationsDuration + 'ms' }"
     >
       <task v-for="task of filteredTodoList" :key="task.id" :task="task" />
     </v-list>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 import Task from './-Task/TodoList-Task'
 
 export default {
@@ -31,8 +31,9 @@ export default {
     Task
   },
   computed: {
-    ...mapGetters('todo', ['filterValue', 'filteredTodoList']),
-    ...mapGetters('settings', ['animationsDuration'])
+    ...mapState('todo', ['filterValue']),
+    ...mapGetters('todo', ['filteredTodoList']),
+    ...mapState('settings', ['settings'])
   }
 }
 </script>

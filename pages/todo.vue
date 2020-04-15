@@ -23,7 +23,7 @@
           :disabled="item.disabled"
           @click="
             () => {
-              if (!deleteWarning) return item.handler() // do not show dialog if they're disabled
+              if (!settings.deleteWarning) return item.handler() // do not show dialog if they're disabled
               dialog.show = true
               dialog.agreeHandler = () => {
                 dialog.show = false
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import TodoList from '../components/TodoList/TodoList.vue'
 
 export default {
@@ -75,12 +75,12 @@ export default {
     deleteWarningCheckbox: false
   }),
   computed: {
-    ...mapGetters('todo', ['todoList']),
-    ...mapGetters('settings', ['animationsDuration', 'deleteWarning']),
+    ...mapState('todo', ['todoList']),
+    ...mapState('settings', ['settings']),
     // v-model="filterValue"
     filterValue: {
       get() {
-        return this.$store.getters['todo/filterValue']
+        return this.$store.state.todo.filterValue
       },
       set(filterValue) {
         this.$store.commit('todo/updateFilterValue', filterValue)
@@ -135,7 +135,7 @@ export default {
       setTimeout(() => {
         this.$store.commit('todo/removeAllTasks')
         todoList.classList.remove('TodoList_Removed')
-      }, this.animationsDuration)
+      }, this.settings.animationsDuration)
     },
     removeUncompletedTasks() {
       const todoList = this.$children[this.$children.length - 1].$children[0]
@@ -145,7 +145,7 @@ export default {
       })
       setTimeout(() => {
         this.$store.dispatch('todo/removeUncompletedTasks')
-      }, this.animationsDuration)
+      }, this.settings.animationsDuration)
     },
     removeCompletedTasks() {
       const todoList = this.$children[this.$children.length - 1].$children[0]
@@ -155,11 +155,11 @@ export default {
       })
       setTimeout(() => {
         this.$store.dispatch('todo/removeCompletedTasks')
-      }, this.animationsDuration)
+      }, this.settings.animationsDuration)
     },
     ...mapActions('todo', ['addTask', 'removeTask']),
     ...mapMutations('settings', ['toggleDeleteWarningState']),
-    ...mapMutations('todo', ['updateTodoList', 'makeLastTaskNotNew'])
+    ...mapMutations('todo', ['updateTodoList'])
   }
 }
 </script>
