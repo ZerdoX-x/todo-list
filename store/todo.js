@@ -1,6 +1,7 @@
 export const state = () => ({
   todoList: [],
-  filterValue: 'All'
+  filterValue: 'All',
+  loading: true
 })
 
 export const getters = {
@@ -59,6 +60,9 @@ export const mutations = {
   },
   matchTasksIdWithIndex({ todoList }) {
     todoList.forEach((value, index) => (value.id = index))
+  },
+  stopLoading(state) {
+    state.loading = false
   }
 }
 

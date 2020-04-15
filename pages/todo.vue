@@ -10,12 +10,16 @@
       @click:append="textField.value = ''"
       @keyup.enter="addTask(textField)"
     />
-    <v-menu transition="slide-y-transition" bottom :offset-y="true">
-      <template v-slot:activator="{ on }">
-        <v-btn :disabled="!todoList.length" v-on="on">
-          Remove...
-        </v-btn>
-      </template>
+    <v-btn :disabled="!todoList.length" @click="openMenu">
+      Remove...
+    </v-btn>
+    <v-menu
+      v-model="menu.show"
+      transition="slide-y-transition"
+      bottom
+      :position-x="menu.x"
+      :position-y="menu.y"
+    >
       <v-list>
         <v-list-item
           v-for="(item, index) in setOfTasksItems"
@@ -54,13 +58,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <todo-list /><!--keep todo-list last component (see removeAllTasks)-->
+    <div v-if="loading" class="text-center">
+      <v-progress-circular class="my-5 mx-auto" indeterminate />
+    </div>
+    <todo-list v-else /><!--keep it last component (see removeAllTasks)-->
   </div>
 </template>
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import TodoList from '../components/TodoList/TodoList.vue'
+import TodoList from '../components/TodoList/TodoList'
 
 export default {
   name: 'Todo',
@@ -71,11 +78,16 @@ export default {
       show: false,
       agreeHandler: () => {}
     },
+    menu: {
+      show: false,
+      x: 0,
+      y: 0
+    },
     textField: { value: '' },
     deleteWarningCheckbox: false
   }),
   computed: {
-    ...mapState('todo', ['todoList']),
+    ...mapState('todo', ['todoList', 'loading']),
     ...mapState('settings', ['settings']),
     // v-model="filterValue"
     filterValue: {
@@ -121,14 +133,20 @@ export default {
     }
   },
   // sync todoList & filterValue with localStorage
-  beforeMount() {
+  mounted() {
     const todoList = localStorage.getItem('todoList')
     if (todoList) this.updateTodoList(JSON.parse(todoList))
 
     const filterValue = localStorage.getItem('filterValue')
     if (filterValue) this.filterValue = filterValue
+    this.$store.commit('todo/stopLoading')
   },
   methods: {
+    openMenu({ clientX, clientY }) {
+      this.menu.x = clientX
+      this.menu.y = clientY
+      this.menu.show = !this.menu.show
+    },
     removeAllTasks() {
       const todoList = this.$children[this.$children.length - 1].$el // TodoList component's element
       todoList.classList.add('TodoList_Removed')
