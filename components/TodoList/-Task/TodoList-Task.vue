@@ -8,15 +8,25 @@
     }"
     class="TodoList-Task Task"
   >
-    <span>
+    <v-text-field
+      v-if="edit.is"
+      v-model="edit.value"
+      class="mr-3"
+      @keyup.enter="saveTask(task.id)"
+    />
+    <span v-else>
       {{ task.text | startsWithCapitalLetter }}
     </span>
-    <v-checkbox
-      v-model="checkbox"
+    <v-btn
       class="ml-auto"
-      @change="checkTask(task.id)"
-    />
-    <v-btn icon fab @click="removeTask(task.id)">
+      icon
+      fab
+      @click="edit.is ? saveTask(task.id) : editTask(task.text)"
+    >
+      <v-icon>mdi-{{ edit.is ? 'content-save' : 'pencil' }}</v-icon>
+    </v-btn>
+    <v-checkbox v-model="checkbox" @change="checkTask(task.id)" />
+    <v-btn :disabled="edit.is" icon fab @click="removeTask(task.id)">
       <v-icon>mdi-close-circle</v-icon>
     </v-btn>
   </v-list-item>
@@ -34,7 +44,13 @@ export default {
   props: {
     task: { type: Object, required: true }
   },
-  data: () => ({ checkbox: false }),
+  data: () => ({
+    checkbox: false,
+    edit: {
+      is: false,
+      value: ''
+    }
+  }),
   computed: {
     ...mapState('todo', ['filterValue']),
     ...mapState('settings', ['settings'])
@@ -69,6 +85,14 @@ export default {
         this.$store.commit('todo/checkTask', index)
         this.$el.classList.remove('Task_Moved')
       }, this.settings.animationsDuration)
+    },
+    editTask(text) {
+      this.edit.value = text.replace(text[0], text[0].toUpperCase())
+      this.edit.is = true
+    },
+    saveTask(index) {
+      this.$store.commit('todo/editTask', [index, this.edit.value])
+      this.edit.is = false
     }
   }
 }

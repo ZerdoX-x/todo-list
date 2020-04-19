@@ -16,28 +16,24 @@ export const state = () => ({
 })
 
 export const getters = {
-  animationsDuration({ settings }) {
-    return !settings.animationsEnabled ? 0 : settings.animationsDuration // if animations disabled return 0
-  }
+  animationsDuration: ({ settings }) =>
+    !settings.animationsEnabled ? 0 : settings.animationsDuration // if animations disabled return 0
 }
 
 export const mutations = {
-  updateSettings(state, settings) {
-    state.settings = settings
-  },
-  updateAnimationsDuration({ settings }, animationsDuration) {
-    settings.animationsDuration = animationsDuration
-  },
-  toggleAnimationsState({ settings }, animationsState) {
-    settings.animationsEnabled = animationsState
-  },
-  toggleDeleteWarningState({ settings }, deleteWarningState) {
-    settings.deleteWarning = deleteWarningState
-  },
-  toggleTheme({ settings }, theme) {
-    settings.theme = theme
-  },
-  toggleMiniVariant({ settings }, miniVariant) {
-    settings.miniVariant = miniVariant
-  }
+  updateSettings: (state, settings) => (state.settings = settings),
+
+  updateAnimationsDuration: ({ settings }, animationsDuration) =>
+    (settings.animationsDuration = animationsDuration),
+
+  toggleAnimationsState: ({ settings }, animationsState) =>
+    (settings.animationsEnabled = animationsState),
+
+  toggleDeleteWarningState: ({ settings }, deleteWarningState) =>
+    (settings.deleteWarning = deleteWarningState),
+
+  toggleTheme: ({ settings }, theme) => (settings.theme = theme),
+
+  toggleMiniVariant: ({ settings }, miniVariant) =>
+    (settings.miniVariant = miniVariant)
 }
