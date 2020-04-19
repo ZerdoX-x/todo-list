@@ -39,7 +39,7 @@ export default {
   name: 'Task',
   filters: {
     startsWithCapitalLetter: (string) =>
-      string.replace(string[0], string[0].toUpperCase())
+      string ? string.replace(string[0], string[0].toUpperCase()) : ''
   },
   props: {
     task: { type: Object, required: true }
@@ -87,7 +87,7 @@ export default {
       }, this.settings.animationsDuration)
     },
     editTask(text) {
-      this.edit.value = text.replace(text[0], text[0].toUpperCase())
+      this.edit.value = text ? text.replace(text[0], text[0].toUpperCase()) : ''
       this.edit.is = true
     },
     saveTask(index) {
