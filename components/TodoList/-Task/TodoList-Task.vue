@@ -46,10 +46,7 @@ export default {
   },
   data: () => ({
     checkbox: false,
-    edit: {
-      is: false,
-      value: ''
-    }
+    edit: { is: false, value: '' }
   }),
   computed: {
     ...mapState('todo', ['filterValue']),
@@ -99,13 +96,51 @@ export default {
 </script>
 
 <style>
-@import './_Completed/TodoList-Task_Completed.css';
-@import './_Moved/TodoList-Task_Moved.css';
-@import './_New/TodoList-Task_New.css';
-@import './_Removed/TodoList-Task_Removed.css';
-
 .Task {
   will-change: transform, opacity;
   animation-fill-mode: forwards;
+}
+
+.Task.Task_Completed {
+  opacity: 0.5;
+}
+
+.Task.Task_Moved {
+  animation-name: Task_Moved;
+}
+
+@keyframes Task_Moved {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+.Task.Task_New {
+  animation-name: Task_New;
+}
+
+@keyframes Task_New {
+  from {
+    transform: translateX(-100vw);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.Task.Task_Removed {
+  animation-name: Task_Removed;
+}
+
+@keyframes Task_Removed {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
 }
 </style>

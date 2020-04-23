@@ -1,15 +1,12 @@
 <template>
-  <v-card class="Settings-AnimationsDuration">
+  <v-card>
     <v-card-subtitle>
       Disable/Enable Warning About Deleting Set Of Tasks
     </v-card-subtitle>
     <v-switch
-      v-model="checkbox"
+      :input-value="settings.deleteWarning"
       class="px-6 pb-5 mt-0"
-      :label="
-        `Warning: ${checkbox ? 'on' : 'off'}.
-        Default value: ${defaultSettings.deleteWarning ? 'on' : 'off'}`
-      "
+      :label="label"
       @change="toggleDeleteWarningState"
     />
   </v-card>
@@ -19,18 +16,11 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'TodoListDeleteWarning',
-  data: () => ({ checkbox: false }),
-  computed: mapState('settings', ['settings', 'defaultSettings']),
-  watch: {
-    checkbox(enabled) {
-      this.toggleDeleteWarningState(enabled)
-    },
-    'settings.deleteWarning': {
-      immediate: true,
-      handler(enabled) {
-        this.checkbox = enabled
-      }
+  computed: {
+    ...mapState('settings', ['settings', 'defaultSettings']),
+    label() {
+      return `Warning: ${this.settings.deleteWarning ? 'on' : 'off'}.
+        Default value: ${this.defaultSettings.deleteWarning ? 'on' : 'off'}`
     }
   },
   methods: mapMutations('settings', ['toggleDeleteWarningState'])

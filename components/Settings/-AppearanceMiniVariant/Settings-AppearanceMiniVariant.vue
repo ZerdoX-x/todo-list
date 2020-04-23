@@ -1,31 +1,26 @@
 <template>
-  <v-card class="Settings-AppearanceMiniVariant">
-    <v-card-subtitle>
-      Disable/enable condensed drawer
-    </v-card-subtitle>
+  <v-card>
+    <v-card-subtitle>Disable/enable condensed drawer</v-card-subtitle>
     <v-switch
-      v-model="miniVariant"
+      :input-value="settings.miniVariant"
       class="px-6 pb-5 mt-0"
-      :label="
-        `Condensed: ${miniVariant}.
-        Default value: ${$store.state.settings.defaultSettings.miniVariant}`
-      "
+      :label="label"
+      @change="toggleMiniVariant"
     />
   </v-card>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
-  name: 'AppearanceMiniVariant',
   computed: {
-    miniVariant: {
-      get() {
-        return this.$store.state.settings.settings.miniVariant
-      },
-      set(miniVariant) {
-        this.$store.commit('settings/toggleMiniVariant', miniVariant)
-      }
+    ...mapState('settings', ['settings', 'defaultSettings']),
+    label() {
+      return `Condensed: ${this.settings.miniVariant}.
+              Default value: ${this.defaultSettings.miniVariant}`
     }
-  }
+  },
+  methods: mapMutations('settings', ['toggleMiniVariant'])
 }
 </script>

@@ -30,8 +30,5 @@
 </template>
 
 <script>
-export default {
-  name: 'Login',
-  transitions: 'page'
-}
+export default { name: 'Login' }
 </script>

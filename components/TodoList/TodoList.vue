@@ -26,12 +26,9 @@ import { mapState, mapGetters } from 'vuex'
 import Task from './-Task/TodoList-Task'
 
 export default {
-  name: 'TodoList',
-  components: {
-    Task
-  },
+  components: { Task },
   computed: {
-    ...mapState('todo', ['filterValue']),
+    ...mapState(['todo', ['filterValue']]),
     ...mapGetters('todo', ['filteredTodoList']),
     ...mapState('settings', ['settings'])
   }
@@ -39,10 +36,21 @@ export default {
 </script>
 
 <style>
-@import './_Removed/TodoList_Removed.css';
-
 .TodoList {
   animation-fill-mode: forwards;
   background-color: transparent !important;
+}
+
+.TodoList_Removed {
+  animation-name: TodoList_Removed;
+}
+
+@keyframes TodoList_Removed {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100vw);
+  }
 }
 </style>

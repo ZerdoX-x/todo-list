@@ -72,7 +72,6 @@ import TodoList from '../components/TodoList/TodoList'
 export default {
   name: 'Todo',
   components: { TodoList },
-  transitions: 'page',
   data: () => ({
     dialog: {
       show: false,

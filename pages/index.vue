@@ -19,7 +19,6 @@
 <script>
 export default {
   name: 'Index',
-  transitions: 'page',
   data: () => ({
     links: [
       {

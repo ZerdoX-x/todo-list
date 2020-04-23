@@ -30,7 +30,6 @@ import AppearanceMiniVariant from '../components/Settings/-AppearanceMiniVariant
 
 export default {
   name: 'Settings',
-  transitions: 'page',
   components: {
     AnimationsDuration,
     AnimationsState,

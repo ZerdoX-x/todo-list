@@ -1,30 +1,25 @@
 <template>
-  <v-card class="Settings-AnimationsDuration">
-    <v-card-subtitle>
-      Todo List Animations Duration
-    </v-card-subtitle>
+  <v-card>
+    <v-card-subtitle>Todo List Animations Duration</v-card-subtitle>
     <v-slider
-      v-model="animationsDuration"
-      :disabled="disabled"
-      class="align-center px-6 pb-5"
-      :max="maxAnimationsDuration"
-      :min="minAnimationsDuration"
-      :tick-labels="animationsDurationDefaultTickLabel"
-      :step="animationsDurationSliderStep"
+      :value="settings.animationsDuration"
+      :disabled="!settings.animationsEnabled"
+      class="slider align-center px-6 pb-5"
+      :max="max"
+      :min="min"
+      :tick-labels="defaultTickLabel"
+      :step="step"
       tick-size="0"
       ticks="always"
-      hide-details
       thumb-label
+      hide-details
+      @input="sliderHandler"
     >
       <template v-slot:prepend>
-        <v-icon @click="decreaseAnimationDuration">
-          mdi-minus
-        </v-icon>
+        <v-icon @click="decreaseAnimationDuration">mdi-minus</v-icon>
       </template>
       <template v-slot:append>
-        <v-icon @click="increaseAnimationDuration">
-          mdi-plus
-        </v-icon>
+        <v-icon @click="increaseAnimationDuration">mdi-plus</v-icon>
       </template>
     </v-slider>
   </v-card>
@@ -34,35 +29,21 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
-  name: 'AnimationsDuration',
   data: () => ({
-    animationsDurationSliderStep: 50,
-    maxAnimationsDuration: 2000,
-    minAnimationsDuration: 0,
-    disabled: false, // not disabled by default
+    step: 50,
+    max: 2000,
+    min: 0,
+    disabled: false,
     everChanged: false
   }),
   computed: {
-    animationsDuration: {
-      get() {
-        // get real value, not 0 if animations disabled (see store/settings.js 'getters/animationsDuration')
-        return this.$store.state.settings.settings.animationsDuration
-      },
-      set(animationsDuration) {
-        // if user tried to change animationsDuration, set 'prefersAnimations'
-        if (!this.everChanged) localStorage.setItem('prefersAnimations', '+')
-        this.updateAnimationsDuration(animationsDuration)
-      }
-    },
-    animationsDurationDefaultTickLabel() {
+    ...mapState('settings', ['settings', 'defaultSettings']),
+    defaultTickLabel() {
       const tickLabels = []
-      const step = this.animationsDurationSliderStep
+      const { min, max, step } = this
       const range = {
-        from: 0,
-        to: this.maxAnimationsDuration,
         *[Symbol.iterator]() {
-          for (let value = this.from; value <= this.to; value += step)
-            yield value
+          for (let value = min; value <= max; value += step) yield value
         }
       }
       for (const iteration of range) {
@@ -71,37 +52,29 @@ export default {
         else tickLabels.push('•') // position point on a default value
       }
       return tickLabels // [... '•' ...]
-    },
-    ...mapState('settings', ['settings', 'defaultSettings'])
-  },
-  // update state if switch value changes
-  watch: {
-    'settings.animationsEnabled'(state) {
-      this.disabled = !state
     }
   },
-  created() {
-    // disable slider if animationsEnabled: false
-    this.disabled = !this.settings.animationsEnabled
-  },
   mounted() {
-    // get if user ever tried to change animationsDuration
-    this.everChanged = localStorage.getItem('prefersAnimations')
+    this.everChanged = localStorage.getItem('prefersAnimations') // get if user ever tried to change animationsDuration
   },
   methods: {
+    ...mapMutations('settings', ['updateAnimationsDuration']),
+    sliderHandler(animationsDuration) {
+      if (!this.everChanged) localStorage.setItem('prefersAnimations', '+')
+      this.updateAnimationsDuration(animationsDuration)
+    },
     increaseAnimationDuration() {
-      this.animationsDuration += this.animationsDurationSliderStep
+      this.animationsDuration += this.step
     },
     decreaseAnimationDuration() {
-      this.animationsDuration -= this.animationsDurationSliderStep
-    },
-    ...mapMutations('settings', ['updateAnimationsDuration'])
+      this.animationsDuration -= this.step
+    }
   }
 }
 </script>
 
-<style>
-.v-slider__tick-label {
+<style scoped>
+.slider >>> .v-slider__tick-label {
   transform: translateY(-64%) translateX(-50%) !important;
   font-size: 2em;
 }

@@ -1,34 +1,30 @@
 <template>
-  <v-card class="Settings-AppearanceTheme">
-    <v-card-subtitle>
-      Switch between dark/light themes
-    </v-card-subtitle>
+  <v-card>
+    <v-card-subtitle>Switch between dark/light themes</v-card-subtitle>
     <v-switch
-      v-model="theme"
+      :input-value="settings.theme === 'dark'"
       class="px-6 pb-5 mt-0"
-      :label="
-        `Theme: ${theme ? 'dark' : 'light'}.
-        Default theme: ${
-          $store.state.settings.defaultSettings.theme === 'dark'
-            ? 'dark'
-            : 'light'
-        }`
-      "
+      :label="label"
+      @change="switchHandler"
     />
   </v-card>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex'
+
 export default {
-  name: 'AppearanceTheme',
   computed: {
-    theme: {
-      get() {
-        return this.$store.state.settings.settings.theme === 'dark'
-      },
-      set(isDark) {
-        this.$store.commit('settings/toggleTheme', isDark ? 'dark' : 'light')
-      }
+    ...mapState('settings', ['settings', 'defaultSettings']),
+    label() {
+      return `Theme: ${this.settings.theme}.
+              Default theme: ${this.defaultSettings.theme}`
+    }
+  },
+  methods: {
+    ...mapMutations('settings', ['toggleTheme']),
+    switchHandler(checked) {
+      this.toggleTheme(checked ? 'dark' : 'light')
     }
   }
 }

@@ -3,8 +3,5 @@
 </template>
 
 <script>
-export default {
-  name: 'About',
-  transitions: 'page'
-}
+export default { name: 'About' }
 </script>

@@ -66,6 +66,7 @@
 import { mapState, mapMutations } from 'vuex'
 
 export default {
+  transitions: 'page',
   data: () => ({
     clipped: false,
     drawer: false,
